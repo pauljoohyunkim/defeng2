@@ -8,9 +8,9 @@ pub enum CVType {
 
 #[derive(Debug)]
 pub struct CVTree {
-    node: CVType,
-    depth: u16,
-    children: [Option<Box<CVTree>>; 2]
+    pub node: CVType,
+    pub depth: u16,
+    pub children: [Option<Box<CVTree>>; 2]
 }
 
 impl CVTree {

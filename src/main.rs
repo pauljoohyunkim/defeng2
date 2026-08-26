@@ -1,5 +1,8 @@
 use clap::Parser;
+use std::fs::read_to_string;
+
 mod cvtree;
+mod defeng_generator;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -19,16 +22,34 @@ struct Args {
     max: u8,
 }
 
+fn read_lines(filename: &String) -> Vec<String> {
+    read_to_string(filename)
+    .unwrap()
+    .lines()
+    .map(String::from)
+    .collect()
+}
+
 fn main() {
     let args = Args::parse();
     
+    // Get necessary arguments.
     let c_former_filename = args.consonant_former_file;
-    let v_former_filename = args.vowel_file;
+    let v_filename = args.vowel_file;
     let c_latter_filename = args.consonant_latter_file;
     let min_len = args.min;
     let max_len = args.max;
 
-    let ctree: cvtree::CVTree = cvtree::CVTree::new(2, cvtree::CVType::ConsonantFormer);
+    // Get cluster list.
+    let c_formers = read_lines(&c_former_filename);
+    let c_latters = read_lines(&c_latter_filename);
+    let vs = read_lines(&v_filename);
 
-    println!("{ctree:?}");
+    for i in min_len..(max_len+1) {
+        let ctree = cvtree::CVTree::new(i as u16, cvtree::CVType::ConsonantFormer);
+        let vtree = cvtree::CVTree::new(i as u16, cvtree::CVType::Vowel);
+
+    }
+
+    println!("Done.");
 }
