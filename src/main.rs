@@ -2,6 +2,7 @@ use clap::Parser;
 use std::fs::read_to_string;
 use std::fs::File;
 use std::io::Write;
+use std::io::BufWriter;
 
 mod cvtree;
 mod defeng_generator;
@@ -48,8 +49,8 @@ fn main() {
     let output_filename = args.output;
 
     let mut file: Box<dyn Write> = match output_filename.as_str() {
-        "" => Box::new(std::io::stdout()),
-        m => Box::new(File::create(m).expect("Could not create output file."))
+        "" => Box::new(BufWriter::new(std::io::stdout())),
+        m => Box::new(BufWriter::new(File::create(m).expect("Could not create output file.")))
     };
 
     // Get cluster list.
