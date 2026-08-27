@@ -14,7 +14,20 @@
                     "--bin=defeng2"
                 ]
             },
-            "args": ["-c", "data/c_former.txt", "-C", "data/c_latter.txt", "-v", "data/v.txt", "-m", "2", "-M", "3"]
+            "args": [
+                "-c",
+                "data/c_former.txt",
+                "-C",
+                "data/c_latter.txt",
+                "-v",
+                "data/v.txt",
+                "-m",
+                "2",
+                "-M",
+                "3",
+                "--output",
+                "test.txt"
+            ]
         },
     ]
 }
