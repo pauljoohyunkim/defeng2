@@ -1,5 +1,7 @@
 use clap::Parser;
 use std::fs::read_to_string;
+use std::fs::File;
+use std::io::Write;
 
 mod cvtree;
 mod defeng_generator;
@@ -21,6 +23,9 @@ struct Args {
 
     #[arg(short='M', long, default_value_t = 4)]
     max: u8,
+
+    #[arg(short, long, default_value_t=String::from(""))]
+    output: String
 }
 
 fn read_lines(filename: &String) -> Vec<String> {
@@ -40,6 +45,12 @@ fn main() {
     let c_latter_filename = args.consonant_latter_file;
     let min_len = args.min;
     let max_len = args.max;
+    let output_filename = args.output;
+
+    let mut file: Box<dyn Write> = match output_filename.as_str() {
+        "" => Box::new(std::io::stdout()),
+        m => Box::new(File::create(m).expect("Could not create output file."))
+    };
 
     // Get cluster list.
     let c_formers = read_lines(&c_former_filename);
@@ -52,7 +63,7 @@ fn main() {
         let vtree = cvtree::CVTree::new(i as u16 - 1, cvtree::CVType::Vowel);
 
         let empty_str = String::from("");
-        generate(&ctree, &c_formers, &vs, &c_latters, &empty_str);
-        generate(&vtree, &c_formers, &vs, &c_latters, &empty_str);
+        generate(&ctree, &c_formers, &vs, &c_latters, &empty_str, &mut file);
+        generate(&vtree, &c_formers, &vs, &c_latters, &empty_str, &mut file);
     }
 }
