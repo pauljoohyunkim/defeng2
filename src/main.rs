@@ -3,6 +3,7 @@ use std::fs::read_to_string;
 
 mod cvtree;
 mod defeng_generator;
+use defeng_generator::generate;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -46,10 +47,12 @@ fn main() {
     let vs = read_lines(&v_filename);
 
     for i in min_len..(max_len+1) {
-        let ctree = cvtree::CVTree::new(i as u16, cvtree::CVType::ConsonantFormer);
-        let vtree = cvtree::CVTree::new(i as u16, cvtree::CVType::Vowel);
+        // depth-1 = length
+        let ctree = cvtree::CVTree::new(i as u16 - 1, cvtree::CVType::ConsonantFormer);
+        let vtree = cvtree::CVTree::new(i as u16 - 1, cvtree::CVType::Vowel);
 
+        let empty_str = String::from("");
+        generate(&ctree, &c_formers, &vs, &c_latters, &empty_str);
+        generate(&vtree, &c_formers, &vs, &c_latters, &empty_str);
     }
-
-    println!("Done.");
 }

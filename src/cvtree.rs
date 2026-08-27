@@ -1,5 +1,5 @@
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum CVType {
     ConsonantFormer,
     ConsonantLatter,
